@@ -4,174 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Surprise</title>
+    <title>Document</title>
     <link href="./dist/index.css" rel="stylesheet">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
+
         body {
             font-family: 'Pacifico', cursive;
-            background: url('/image.valentines.jpg') no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
         }
+        </style>
 
-        .hidden {
-            display: none;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .yesBtn {
-            background-color: green;
-            color: white;
-        }
-
-        .noBtn {
-            background-color: red;
-            color: white;
-            position: absolute;
-        }
-    </style>
 </head>
 
-<body>
-    <div class="container">
-        <!-- Form Section -->
-        <h3 class="text-xl text-red-500">Enter Your Special Message ❤️</h3>
-        <form id="valentineForm">
-            <input type="text" id="name" placeholder="Loved one's name" class="block w-full p-2 mt-3 border rounded">
-            <textarea id="message" placeholder="Your love message..." class="block w-full p-2 mt-3 border rounded"></textarea>
-            <button type="submit" class="btn yesBtn mt-3">Send ❤️</button>
-        </form>
+<body class="bg-center bg-cover"
+style="background-image: url('/image.valentines.jpg')">
+    <div class="wrapper flex flex-col items-center h-screen justify-center ">
+        <h2 class="question text-2xl md:text-4xl p-3 tracking-wider">Will you be my Valentine's?</h2>
+        <div class="btn flex gap-8">
+            <button class="yesBtn absolute bg-green-500 px-4 rounded-lg py-2 -ml-20">Yes</button>
+            <button class="noBtn absolute bg-blue-500 px-4 rounded-lg py-2 -mr-20">No</button>
 
-        <!-- Share Link Section -->
-        <div class="hidden mt-4" id="shareContainer">
-            <p>Share this link with your special one:</p>
-            <input type="text" id="shareLink" readonly class="block w-full p-2 mt-2 border rounded">
-            <button class="btn yesBtn mt-2" id="copyLink">Copy Link</button>
         </div>
 
-        <!-- Question Section -->
-        <div class="question-container hidden mt-6">
-            <h2 class="question text-2xl md:text-4xl p-3 tracking-wider">Will you be my Valentine?</h2>
-            <div class="btn-container relative flex gap-8 mt-4">
-                <button class="yesBtn btn">Yes</button>
-                <button class="noBtn btn">No</button>
-            </div>
-        </div>
-
-        <!-- Display Message Section -->
-        <div class="display-message hidden mt-6">
-            <h3 class="text-xl text-pink-500">Your Love Message 💖</h3>
-            <p id="displayName" class="text-lg font-bold mt-2"></p>
-            <p id="displayMessage" class="text-lg italic mt-2"></p>
-        </div>
     </div>
 
     <script>
-        const form = document.getElementById("valentineForm");
-        const questionContainer = document.querySelector(".question-container");
-        const displayMessage = document.querySelector(".display-message");
-        const displayName = document.getElementById("displayName");
-        const displayText = document.getElementById("displayMessage");
-        const shareContainer = document.getElementById("shareContainer");
-        const shareLink = document.getElementById("shareLink");
-        const copyLinkBtn = document.getElementById("copyLink");
-        const noBtn = document.querySelector(".noBtn");
+
+        const wrapper = document.querySelector(".wrapper");
+        const question = document.querySelector(".question");
         const yesBtn = document.querySelector(".yesBtn");
+        const noBtn = document.querySelector(".noBtn");
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const noBtnRect = noBtn.getBoundingClientRect();
 
-        // Check if a message ID exists in the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const messageId = urlParams.get("id");
-
-        if (messageId) {
-            fetch(`https://valentines-7w0c.onrender.com/${messageId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.name && data.message) {
-                        document.querySelector(".container").classList.add("hidden");
-                        questionContainer.classList.remove("hidden");
-
-                        displayName.innerHTML = `<strong>To: ${data.name} 💕</strong>`;
-                        displayText.innerHTML = `"${data.message}"`;
-                    }
-                })
-                .catch(error => console.error("Error fetching message:", error));
-        }
-
-        // Handle Form Submission
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const name = document.getElementById("name").value;
-            const message = document.getElementById("message").value;
-
-            if (name && message) {
-                try {
-                    const response = await fetch("https://valentines-7w0c.onrender.com/send-message", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ name, message })
-                    });
-                    const result = await response.json();
-                    if (result.success) {
-                        const generatedLink = `${window.location.origin}${window.location.pathname}?id=${result.data._id}`;
-                        shareLink.value = generatedLink;
-                        shareContainer.classList.remove("hidden");
-                    }
-                } catch (error) {
-                    console.error("Error saving message:", error);
-                }
-            }
-        });
-
-        // Copy Link to Clipboard
-        copyLinkBtn.addEventListener("click", () => {
-            shareLink.select();
-            document.execCommand("copy");
-            alert("Link copied!");
-        });
-
-        // Handle Yes Button Click
         yesBtn.addEventListener("click", () => {
-            questionContainer.classList.add("hidden");
-            displayMessage.classList.remove("hidden");
-        });
 
-        // Move the No Button
-        noBtn.addEventListener("mouseover", () => {
-            const maxX = window.innerWidth - noBtn.clientWidth;
-            const maxY = window.innerHeight - noBtn.clientHeight;
-            const newX = Math.random() * maxX;
-            const newY = Math.random() * maxY;
-
-            noBtn.style.left = `${newX}px`;
-            noBtn.style.top = `${newY}px`;
+            question.innerHTML = "Awesome!!🤗🤗";
         });
 
         noBtn.addEventListener("click", () => {
-            noBtn.style.position = "absolute";
-            noBtn.style.left = `${Math.random() * window.innerWidth}px`;
-            noBtn.style.top = `${Math.random() * window.innerHeight}px`;
+            const i = Math.floor(Math.random() * (wrapperRect.width - noBtnRect.width)) + 1;
+            const j = Math.floor(Math.random() * (wrapperRect.height - noBtnRect.height)) + 1;
+            noBtn.style.left = i + "px";
+            noBtn.style.top = j + "px";
+
+
         });
     </script>
 </body>

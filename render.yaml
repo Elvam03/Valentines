@@ -1,5 +1,0 @@
-services:
-  - name: valentines-backend
-    envVars:
-      - key: MONGO_URI
-        value: mongodb+srv://elvamvelma:okTsQNpqrwfVsKBi@cluster0.ksh4d.mongodb.net/
