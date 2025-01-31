@@ -1,0 +1,5 @@
+services:
+  - name: valentines-backend
+    envVars:
+      - key: MONGO_URI
+        value: "mongodb+srv://<username>:<password>@cluster.mongodb.net/valentinesDB?retryWrites=true&w=majority"
