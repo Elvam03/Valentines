@@ -22,6 +22,7 @@
 style="background-image: url('/image.valentines.jpg')">
     <div class="wrapper flex flex-col items-center h-screen justify-center ">
         <h2 class="question text-2xl md:text-4xl p-3 tracking-wider">Will you be my Valentine's?</h2>
+        <h3 class="text text-2xl m-2"></h3>
         <div class="btn flex gap-8">
             <button class="yesBtn absolute bg-green-500 px-4 rounded-lg py-2 -ml-20">Yes</button>
             <button class="noBtn absolute bg-blue-500 px-4 rounded-lg py-2 -mr-20">No</button>
@@ -34,6 +35,7 @@ style="background-image: url('/image.valentines.jpg')">
 
         const wrapper = document.querySelector(".wrapper");
         const question = document.querySelector(".question");
+        const text = document.querySelector(".text");
         const yesBtn = document.querySelector(".yesBtn");
         const noBtn = document.querySelector(".noBtn");
         const wrapperRect = wrapper.getBoundingClientRect();
@@ -41,7 +43,12 @@ style="background-image: url('/image.valentines.jpg')">
 
         yesBtn.addEventListener("click", () => {
 
-            question.innerHTML = "Awesome!!🤗🤗";
+            question.innerHTML = "Awesome!!🤗🤗 ";
+            text.innerHTML = "Don't forget to get me a gift 😊";
+            
+            yesBtn.style.display = "none";
+            noBtn.style.display = "none";
+
         });
 
         noBtn.addEventListener("click", () => {
